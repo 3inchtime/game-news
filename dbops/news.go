@@ -6,18 +6,18 @@ import (
 )
 
 type News struct {
-	newsId      int
-	newsTitle   string
-	newsArticle string
-	newsUrl     string
-	newsMedia   string
-	createTime  string
+	Id int `json:"id"`
+	Title string `json:"title"`
+	Url string `json:"url"`
+	Media string `json:"media"`
+	Article string `json:"article"`
+	CreateAt string `json:"create_at"`
 }
 
 func GetAllNews(limit int) ([]News, error) {
 	db := mysql.DBCon()
 
-	stmt, err := db.Prepare("select news_id, title, url, media, article from news order by create_time limit ?")
+	stmt, err := db.Prepare("select news_id, title, url, media, article, create_time from news order by create_time desc limit ?")
 	if err != nil {
 		return nil, err
 	}
@@ -32,7 +32,7 @@ func GetAllNews(limit int) ([]News, error) {
 	var newsData []News
 	for rows.Next() {
 		news := News{}
-		err = rows.Scan(&news.newsId, &news.newsTitle, &news.newsUrl, &news.newsMedia, &news.newsArticle)
+		err = rows.Scan(&news.Id, &news.Title, &news.Url, &news.Media, &news.Article, &news.CreateAt)
 		if err != nil {
 			fmt.Println(err.Error())
 			break

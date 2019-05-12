@@ -33,10 +33,8 @@ func GetNews(c *gin.Context) {
 	}
 
 	code = 200
-
 	c.JSON(http.StatusOK, gin.H{
 		"code" : code,
-		"msg" : "Get News Successful!!!",
 		"data": newsData,
 	})
 }
