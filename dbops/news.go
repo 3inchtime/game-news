@@ -6,11 +6,11 @@ import (
 )
 
 type News struct {
-	Id int `json:"id"`
-	Title string `json:"title"`
-	Url string `json:"url"`
-	Media string `json:"media"`
-	Article string `json:"article"`
+	Id       int    `json:"id"`
+	Title    string `json:"title"`
+	Url      string `json:"url"`
+	Media    string `json:"media"`
+	Article  string `json:"article"`
 	CreateAt string `json:"create_at"`
 }
 
@@ -40,10 +40,9 @@ func GetAllNews(limit int) ([]News, error) {
 
 		newsData = append(newsData, news)
 	}
-	
+
 	return newsData, nil
 }
-
 
 func CreateNews(title, url, article, media string) bool {
 	db := mysql.DBCon()

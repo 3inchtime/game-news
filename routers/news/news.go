@@ -2,14 +2,15 @@ package news
 
 import (
 	"game-news/dbops"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 func GetNews(c *gin.Context) {
 	limit := c.Query("limit")
-	num,err := strconv.Atoi(limit)
+	num, err := strconv.Atoi(limit)
 
 	code := 200
 	if err != nil {
@@ -34,7 +35,7 @@ func GetNews(c *gin.Context) {
 
 	code = 200
 	c.JSON(http.StatusOK, gin.H{
-		"code" : code,
+		"code": code,
 		"data": newsData,
 	})
 }
@@ -48,8 +49,8 @@ func CreateNews(c *gin.Context) {
 	code := 200
 	if dbops.CreateNews(title, url, article, media) {
 		c.JSON(http.StatusOK, gin.H{
-			"code" : code,
-			"msg" : "Create News Successful!!!",
+			"code": code,
+			"msg":  "Create News Successful!!!",
 		})
 	}
 }

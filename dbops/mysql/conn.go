@@ -3,8 +3,9 @@ package mysql
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var db *sql.DB
