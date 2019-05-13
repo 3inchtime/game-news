@@ -7,10 +7,42 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>GameNews</title>
     <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/main.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <!-- <link href="../css/main.css" rel="stylesheet"> -->
+    <style>
+        .side-bar .list-group-item {
+            border: none;
+            border-radius: 3px;
+            margin-bottom: 5px;
+        }
+
+        .news-item .title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .news-item .content {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .news-item .info .media {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .news-item .info .pub_time {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+    </style>
 </head>
 
-<body>
+<body onload="getNews()">
     <div class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
@@ -29,22 +61,43 @@
                 </div>
             </div>
             <div class="col-sm-9">
-                <div class="news-list">
-                    <div class="news-item">
-                        <div class="title">《蜘蛛侠：英雄远征》被曝内地定档6月28日 超前北美5天上映</div>
-                        <div class="info">
-                            <span class="media">GameSky</span>
-                            <span class="pub_time">2019-5-13 16:34:56</span>
-                        </div>
-                        <div class="content">
-                            　　据知名电影自媒体@TNABO北美票房榜吧爆料，《蜘蛛侠：英雄远征》内地定档6月28日杀入暑期档，超前北美5天公映。　　今天早些时候知名电影博主@电影守望者余泳称，《蜘蛛侠：英雄远征》将会快速上映。“快速上映”的说法或许意味着有望提前北美上映，结合两位圈内大佬的爆料，《蜘蛛侠：英雄远征》很有可能6月28日内地上映，提前北美。　　《蜘蛛侠：英雄远征》讲述了蜘蛛侠将身穿神盾局特制的全新蜘蛛战甲探访欧洲旅行，然而让人愉快的假期却被元素众打扰，他不得不在欧洲对付元素众反派，并与假意联手的“神秘客”共同作战，将于7月2日在北美上映。
-                        </div>
-                    </div>
+                <div class="news-list" id="news-list">
                 </div>
             </div>
         </div>
 
     </div>
 </body>
+<script type="text/javascript">
+    window.onload = function () {
+        $.ajax({
+            url: "/api/news?limit=10",
+            type: "GET",
+            error: function (err) {
+                alert(err);
+            },
+            success: function (body) {
+                if (!body) {
+                    return;
+                }
+                if (!body || body.length <= 0) {
+                    return;
+                }
+                var html = '';
+                for (var i = 0; i < body.length; i++) {
+                    html = html + '<div class="news-item">';
+                    html = html + '<div class="title">' + body[i].title + '</div>';
+                    html = html + '<div class="info"><span class="media col-sm-2">' + body[i].media +
+                        '</span>';
+                    html = html + '<span class="pub_time col-sm-10">' + body[i].create_at +
+                        '</span></div>';
+                    html = html + '<div class="content">' + body[i].article.slice(0, 200) + '</div>';
+                    html = html + '</div>';
+                }
+                $('#news-list').html(html);
+            }
+        });
+    }
+</script>
 
 </html>

@@ -34,10 +34,7 @@ func GetNews(c *gin.Context) {
 	}
 
 	code = 200
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"data": newsData,
-	})
+	c.JSON(http.StatusOK, newsData)
 }
 
 func CreateNews(c *gin.Context) {
