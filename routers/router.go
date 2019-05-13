@@ -22,9 +22,9 @@ func InitRouter() *gin.Engine {
 	}
 
 	r.GET("/", func(c *gin.Context) {
-		file, _ := os.Open("./static/index.html")
+		file, _ := os.Open("./static/html/index.html")
 		html, _ := ioutil.ReadAll(file)
-		c.Data(http.StatusOK, "index.html", html)
+		c.Data(http.StatusOK, "html", html)
 	})
 
 	return r
