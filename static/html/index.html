@@ -62,6 +62,14 @@
             </div>
             <div class="col-sm-9">
                 <div class="news-list" id="news-list">
+                    <div class="news-item">
+                        <div class="title"></div>
+                        <div class="info">
+                            <span class="media col-sm-2"></span>
+                            <span class="pub_time col-sm-10"></span>
+                        </div>
+                        <div class="content"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -89,7 +97,7 @@
                     html = html + '<div class="title">' + body[i].title + '</div>';
                     html = html + '<div class="info"><span class="media col-sm-2">' + body[i].media +
                         '</span>';
-                    html = html + '<span class="pub_time col-sm-10">' + body[i].create_at +
+                    html = html + '<span class="pub_time col-sm-10">' + body[i].pub_time +
                         '</span></div>';
                     html = html + '<div class="content">' + body[i].article.slice(0, 200) + '</div>';
                     html = html + '</div>';

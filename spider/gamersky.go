@@ -99,14 +99,14 @@ func getNews(url string, wg *sync.WaitGroup) {
 	db := mysql.DBCon()
 
 	stmt, err := db.Prepare(
-		"insert into news (`title`, `url`, `media`, `article`) values (?,?,?,?)")
+		"insert into game_news (`title`, `url`, `media`, `content`, `pub_time`) values (?,?,?,?,?)")
 	if err != nil {
 		fmt.Println(err)
 		wg.Done()
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(news.Title, news.Url, news.Media, news.Content)
+	_, err = stmt.Exec(news.Title, news.Url, news.Media, news.Content, news.PubTime)
 	if err != nil {
 		fmt.Println(err)
 		wg.Done()
