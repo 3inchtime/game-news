@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"game-news/routers/media"
 	"game-news/routers/news"
 	"io/ioutil"
 	"net/http"
@@ -17,8 +18,10 @@ func InitRouter() *gin.Engine {
 
 	api := r.Group("/api")
 	{
-		api.GET("news", news.GetNews)
+		//api.GET("news", news.GetAllNews)
+		api.GET("news", news.GetNewsByMedia)
 		api.POST("news", news.CreateNews)
+		api.GET("media", media.GetAllMedia)
 	}
 
 	r.GET("/", func(c *gin.Context) {
