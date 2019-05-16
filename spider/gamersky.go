@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"game-news/dbops/mysql"
+	"log"
 	"net/http"
 	"regexp"
 	"sync"
@@ -22,14 +23,12 @@ func main() {
 	url := "https://www.gamersky.com/news/"
 	resp, err := http.Get(url)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		fmt.Printf("Error: status code %d", resp.StatusCode)
-		return
+	if resp.StatusCode != 200 {
+		log.Fatalf("status code error: %d %s", resp.StatusCode, resp.Status)
 	}
 
 	html, err := goquery.NewDocumentFromReader(resp.Body)
@@ -56,7 +55,7 @@ func getNewsList(html *goquery.Document, newsList []string) []string {
 func getNews(url string, wg *sync.WaitGroup) {
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		wg.Done()
 		return
 	}
@@ -64,7 +63,7 @@ func getNews(url string, wg *sync.WaitGroup) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		fmt.Printf("Error: status code %d", resp.StatusCode)
+		log.Printf("Error: status code %d", resp.StatusCode)
 		wg.Done()
 		return
 	}
@@ -91,9 +90,8 @@ func getNews(url string, wg *sync.WaitGroup) {
 	html.Find("div[class=detail]").Each(func(i int, selection *goquery.Selection) {
 		tmpTime = selection.Text()
 	})
-	var timeString []string
 	reg := regexp.MustCompile(`\d+`)
-	timeString = reg.FindAllString(tmpTime, -1)
+	timeString := reg.FindAllString(tmpTime, -1)
 	news.PubTime = fmt.Sprintf("%s-%s-%s %s:%s:%s", timeString[0], timeString[1], timeString[2], timeString[3], timeString[4], timeString[5])
 
 	db := mysql.DBCon()
@@ -101,15 +99,18 @@ func getNews(url string, wg *sync.WaitGroup) {
 	stmt, err := db.Prepare(
 		"insert into news (`title`, `url`, `media`, `content`, `pub_time`) values (?,?,?,?,?)")
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		wg.Done()
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(news.Title, news.Url, news.Media, news.Content, news.PubTime)
+	rs, err := stmt.Exec(news.Title, news.Url, news.Media, news.Content, news.PubTime)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		wg.Done()
+	}
+	if id, _ := rs.LastInsertId(); id > 0 {
+		log.Println("插入成功")
 	}
 	wg.Done()
 }
