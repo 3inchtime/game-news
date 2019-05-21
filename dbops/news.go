@@ -17,7 +17,7 @@ type News struct {
 
 func GetAllNews(begin, end int) ([]News, error) {
 	db := mysql.DBCon()
-	stmt, err := db.Prepare("select n.id, n.title, n.url, m.name, n.content, n.pub_time from news n inner join media m on n.media_id = m.id order by n.create_time limit ?,?")
+	stmt, err := db.Prepare("select n.id, n.title, n.url, m.name, n.content, n.pub_time from news n inner join media m on n.media_id = m.id order by n.create_time desc limit ?,?")
 	if err != nil {
 		return nil, err
 	}

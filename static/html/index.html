@@ -14,6 +14,7 @@
             font-size: 26px;
             font-weight: bold;
         }
+
         .side-bar .list-group-item {
             border: none;
             border-radius: 3px;
@@ -99,13 +100,13 @@
                 alert(err);
             },
             success: function (body) {
-                if (!body) {
-                    return;
-                }
-                if (!body || body.length <= 0) {
-                    return;
-                }
                 var html = '';
+                if (!body || body.length <= 0) {
+                    html = html + '<div class="news-item">';
+                    html = html + '<div class="title">暂无新闻</div>';
+                    html = html + '</div>';
+                    $('#news-list').html(html);
+                }
                 for (var i = 0; i < body.length; i++) {
                     html = html + '<div class="news-item">';
                     html = html + '<div class="title">' + body[i].title + '</div>';
@@ -113,7 +114,8 @@
                         '</span>';
                     html = html + '<span class="pub_time col-sm-4">' + body[i].pub_time +
                         '</span>';
-                    html = html + '<span class="origin_url col-sm-5"><a href="' + body[i].url + '">原文链接</a></span></div>';
+                    html = html + '<span class="origin_url col-sm-5"><a href="' + body[i].url +
+                        '">原文链接</a></span></div>';
                     html = html + '<div class="content">' + body[i].article.slice(0, 1000) + '</div>';
                     html = html + '</div>';
                 }
@@ -134,13 +136,53 @@
             if (!body || body.length <= 0) {
                 return;
             }
-            var html = '<a href="#" class="list-group-item">全部</a>';
+            var html = '<a href="./" class="list-group-item">全部</a>';
             for (var i = 0; i < body.length; i++) {
-                html = html + '<a href="/api/news?id=' + body[i].Id + '" class="list-group-item">' + body[i].Name + '</a>';
+                html = html +
+                    '<a href="javascript:void(0);" class="list-group-item" onclick="get_news(' + body[i]
+                    .Id + ')">' + body[i]
+                    .Name + '</a>';
             }
             $('#media_list').html(html);
         }
     })
+
+    function get_news(media_id) {
+        $.ajax({
+            url: "/api/news?",
+            type: "GET",
+            data: {
+                id: media_id
+            },
+            error: function (err) {
+                alert(err);
+            },
+            success: function (body) {
+                var html = '';
+                if (!body || body.length <= 0) {
+                    html = html + '<div class="news-item">';
+                    html = html + '<div class="title">暂无新闻</div>';
+                    html = html + '</div>';
+                    $('#news-list').html(html);
+                }
+                var html = '';
+                for (var i = 0; i < body.length; i++) {
+                    html = html + '<div class="news-item">';
+                    html = html + '<div class="title">' + body[i].title + '</div>';
+                    html = html + '<div class="info"><span class="media col-sm-3">' + body[i].media +
+                        '</span>';
+                    html = html + '<span class="pub_time col-sm-4">' + body[i].pub_time +
+                        '</span>';
+                    html = html + '<span class="origin_url col-sm-5"><a href="' + body[i].url +
+                        '">原文链接</a></span></div>';
+                    html = html + '<div class="content">' + body[i].article.slice(0, 1000) + '</div>';
+                    html = html + '</div>';
+                }
+                $('#news-list').html(html);
+            }
+
+        });
+    }
 </script>
 
 </html>
