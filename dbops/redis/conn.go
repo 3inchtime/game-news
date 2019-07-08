@@ -1,4 +1,4 @@
-package main
+package redis
 
 import (
 	"fmt"
@@ -19,38 +19,7 @@ func newRedis() redis.Conn {
 	}
 }
 
-// type People struct {
-// 	Name string `json:"name_tILE"`
-// 	Age  int    `json:"AGE_SIZE"`
-// }
-
-// func TestStructToJson() string {
-// 	p := People{
-// 		Name: "Liu xx",
-// 		Age:  18,
-// 	}
-
-// 	//Person 结构体转换为对应的 Json
-// 	jsonBytes, err := json.Marshal(p)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-// 	return string(jsonBytes)
-// }
-
-// func main() {
-// 	c := newRedis()
-// 	s := TestStructToJson()
-// 	v, err := c.Do("SET", "news", s)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 		return
-// 	}
-// 	fmt.Println(v)
-// 	v, err = redis.String(c.Do("GET", "news"))
-// 	if err != nil {
-// 		fmt.Println(err)
-// 		return
-// 	}
-// 	fmt.Println(v)
-// }
+func RedisCon() redis.Conn {
+	cache := newRedis()
+	return cache
+}

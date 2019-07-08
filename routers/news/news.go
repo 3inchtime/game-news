@@ -75,15 +75,19 @@ func GetNewsByMedia(c *gin.Context) {
 func CreateNews(c *gin.Context) {
 	title := c.PostForm("title")
 	url := c.PostForm("url")
-	media := c.PostForm("media")
+	mediaID := c.PostForm("media_id")
 	content := c.PostForm("content")
-	pub_time := c.PostForm("pub_time")
+	pubTime := c.PostForm("pub_time")
 
-	code := 200
-	if dbops.CreateNews(title, url, content, media, pub_time) {
-		c.JSON(http.StatusOK, gin.H{
-			"code": code,
-			"msg":  "Create News Successful!!!",
-		})
+	if dbops.CreateNews(title, url, content, mediaID, pubTime) {
+		c.String(http.StatusOK, fmt.Sprintf("News Created"))
+	} else {
+		c.String(http.StatusForbidden, fmt.Sprintf("News Created Faild"))
+	}
+
+	if dbops.CreateNewsCache(title, url, content, mediaID, pubTime) {
+		fmt.Println("Create News Cache Successful")
+	} else {
+		fmt.Println("Create News Cache Faild")
 	}
 }
