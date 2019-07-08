@@ -97,7 +97,7 @@ func getNews(url string, wg *sync.WaitGroup) {
 	db := mysql.DBCon()
 
 	stmt, err := db.Prepare(
-		"insert into news (`title`, `url`, `media`, `content`, `pub_time`) values (?,?,?,?,?)")
+		"insert into gamesky (`title`, `url`, `media`, `content`, `pub_time`) values (?,?,?,?,?)")
 	if err != nil {
 		log.Println(err)
 		wg.Done()
